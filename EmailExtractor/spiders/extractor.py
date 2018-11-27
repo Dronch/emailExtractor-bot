@@ -8,13 +8,13 @@ class EmailExtractorSpider(scrapy.Spider):
 
     name = "extractor"
 
-    depth = 2
     founded = False
     bad_ext = [".jpg", ".png", ".jpeg", ".bmp"]
 
-    def __init__(self, url, **kwargs):
+    def __init__(self, url, depth=2, **kwargs):
         self.allowed_domains = [urlparse(url).netloc]
         self.start_urls = [url]
+        self.depth = depth
         super(EmailExtractorSpider, self).__init__(**kwargs)
 
     def parse(self, response):
@@ -38,3 +38,4 @@ class EmailExtractorSpider(scrapy.Spider):
             for link in soup.findAll('a', attrs={'href': re.compile("^http")}):
                 url = link.get('href')
                 yield scrapy.Request(url, callback=self.parse, meta={'level': level + 1})
+
