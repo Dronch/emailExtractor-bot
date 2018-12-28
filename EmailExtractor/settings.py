@@ -14,6 +14,7 @@ BOT_NAME = 'EmailExtractor'
 SPIDER_MODULES = ['EmailExtractor.spiders']
 NEWSPIDER_MODULE = 'EmailExtractor.spiders'
 
+LOG_LEVEL = 'INFO'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'EmailExtractor (+http://www.yourdomain.com)'
@@ -46,9 +47,13 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
-#SPIDER_MIDDLEWARES = {
+SPIDER_MIDDLEWARES = {
 #    'EmailExtractor.middlewares.EmailextractorSpiderMiddleware': 543,
-#}
+    'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': 110,
+    'EmailExtractor.middlewares.ProxyMiddleware': 100,
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_fake_useragent.middleware.RandomUserAgentMiddleware': 400,
+}
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -89,5 +94,3 @@ DOWNLOADER_MIDDLEWARES = {
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
-
-LOG_LEVEL = 'INFO'

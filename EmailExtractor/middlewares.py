@@ -6,17 +6,16 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-from agents import AGENTS
-from scrapy.http.headers import Headers
 import random
 
 
-class CustomUserAgentMiddleware(object):
+class ProxyMiddleware(object):
 
     def process_request(self, request, spider):
-        agent = random.choice(AGENTS)
-        headers = {'User-Agent': agent}
-        request.headers = Headers(headers)
+        request.meta['proxy'] = 'https://' + random.choice(list(spider.proxy_list))
+
+    def process_exception(self, request, exception, spider):
+        return request
 
 
 class EmailextractorSpiderMiddleware(object):
